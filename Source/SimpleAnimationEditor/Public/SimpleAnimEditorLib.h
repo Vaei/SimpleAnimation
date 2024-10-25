@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 
-#include "SimpleAnimationEditorLib.generated.h"
+#include "SimpleAnimEditorLib.generated.h"
 
 /**
- * 
+ * Editor-only animation tooling
  */
 UCLASS()
-class SIMPLEANIMATIONEDITOR_API USimpleAnimationEditorLib : public UBlueprintFunctionLibrary
+class SIMPLEANIMATIONEDITOR_API USimpleAnimEditorLib : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Jared Taylor. All Rights Reserved
 
 
-#include "SimpleAnimationEditorLib.h"
+#include "SimpleAnimEditorLib.h"
 
 #include "AnimPose.h"
 
-#include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimationEditorLib)
+#include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimEditorLib)
 
-void USimpleAnimationEditorLib::AutoSetTangents(TArray<FRichCurveKey>& OutKeys, float Tension)
+void USimpleAnimEditorLib::AutoSetTangents(TArray<FRichCurveKey>& OutKeys, float Tension)
 {
 	// Iterate over all points in this InterpCurve
 	for (int32 KeyIndex = 0; KeyIndex<OutKeys.Num(); KeyIndex++)
@@ -84,7 +84,7 @@ void USimpleAnimationEditorLib::AutoSetTangents(TArray<FRichCurveKey>& OutKeys, 
 	}
 }
 
-void USimpleAnimationEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, float>& TimeValueMap,
+void USimpleAnimEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, float>& TimeValueMap,
 	TArray<FRichCurveKey>& OutKeys)
 {
 	OutKeys.Reset();
@@ -145,7 +145,7 @@ void USimpleAnimationEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, f
 	AutoSetTangents(OutKeys);
 }
 
-bool USimpleAnimationEditorLib::DoesAnimationLoop(const UAnimSequence* Animation, float DetectionThreshold,
+bool USimpleAnimEditorLib::DoesAnimationLoop(const UAnimSequence* Animation, float DetectionThreshold,
 	bool bIgnoreRootMotion, bool bIgnorePelvis)
 {
 	// Only do this if the animation is looping
@@ -167,7 +167,7 @@ bool USimpleAnimationEditorLib::DoesAnimationLoop(const UAnimSequence* Animation
 	return CompareBoneTransforms(FirstPose, LastPose, DetectionThreshold);
 }
 
-bool USimpleAnimationEditorLib::CompareBoneTransforms(const TArray<FTransform>& TransformsA,
+bool USimpleAnimEditorLib::CompareBoneTransforms(const TArray<FTransform>& TransformsA,
 	const TArray<FTransform>& TransformsB, float Tolerance)
 {
 	if (TransformsA.Num() != TransformsB.Num())
@@ -184,7 +184,7 @@ bool USimpleAnimationEditorLib::CompareBoneTransforms(const TArray<FTransform>& 
 	return true;
 }
 
-void USimpleAnimationEditorLib::GetPoseForTime(const UAnimSequenceBase* Animation, TArray<FTransform>& Transforms,
+void USimpleAnimEditorLib::GetPoseForTime(const UAnimSequenceBase* Animation, TArray<FTransform>& Transforms,
 	float Time)
 {
 	// Initialize the array of transforms
@@ -202,7 +202,7 @@ void USimpleAnimationEditorLib::GetPoseForTime(const UAnimSequenceBase* Animatio
 	}
 }
 
-void USimpleAnimationEditorLib::GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time,
+void USimpleAnimEditorLib::GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time,
 	bool bExtractRootMotion, FTransform& Pose)
 {
 	Pose.SetIdentity();
@@ -213,7 +213,7 @@ void USimpleAnimationEditorLib::GetBonePoseForTime(const UAnimSequenceBase* Anim
 	Pose = PoseArray[0];
 }
 
-void USimpleAnimationEditorLib::GetBonePosesForTimeInternal(const UAnimSequenceBase* Animation, TArray<FName> BoneNames,
+void USimpleAnimEditorLib::GetBonePosesForTimeInternal(const UAnimSequenceBase* Animation, TArray<FName> BoneNames,
 	float Time, bool bExtractRootMotion, TArray<FTransform>& Poses)
 {
 	Poses.Empty(BoneNames.Num());
