@@ -12,7 +12,7 @@ void USimpleAnimLib::DrawPawnDebugPhysicsBodies(APawn* Pawn, USkeletalMeshCompon
 	const bool bDrawLocal, const bool bDrawSimulated, FLinearColor AuthColor, FLinearColor LocalColor,
 	FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
 {
-#if ENABLE_DRAW_DEBUG
+#if UE_ENABLE_DEBUG_DRAWING
 	// Check if we should draw at all
 	if (!bDrawAuthority && !bDrawLocal && !bDrawSimulated)
 	{
@@ -55,7 +55,7 @@ void USimpleAnimLib::DrawPawnDebugPhysicsBodies(APawn* Pawn, USkeletalMeshCompon
 void USimpleAnimLib::DrawDebugPhysicsBodies(USkeletalMeshComponent* Mesh, FLinearColor LinearColor,
 	const bool bPersistentLines, const float Duration, const float Thickness)
 {
-#if ENABLE_DRAW_DEBUG
+#if UE_ENABLE_DEBUG_DRAWING
 	// Check if we have a valid mesh and world
 	if (!Mesh || !Mesh->GetWorld())
 	{
