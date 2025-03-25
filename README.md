@@ -4,6 +4,9 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.2.0
+* Add asset editor tooling
+
 ### 1.1.0
 * Refactor SimpleAnimationEditorLib to SimpleAnimEditorLib
 * Add SimpleAnimLib (runtime) with capability to draw physics bodies based on net role

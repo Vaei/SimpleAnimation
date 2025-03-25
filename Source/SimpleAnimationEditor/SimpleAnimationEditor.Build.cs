@@ -18,7 +18,9 @@ public class SimpleAnimationEditor : ModuleRules
             {
                 "CoreUObject",
                 "Engine",
-                "AnimationBlueprintLibrary"
+                "UnrealEd",
+                "AnimationBlueprintLibrary", 
+                "AnimationModifiers"
             }
         );
     }
