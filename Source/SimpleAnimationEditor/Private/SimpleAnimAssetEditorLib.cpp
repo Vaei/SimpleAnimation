@@ -37,7 +37,13 @@ void USimpleAnimAssetEditorLib::SetAnimRootLock(bool bLock, const TArray<UAnimSe
 	{
 		if (IsValid(Animation))
 		{
-			Animation->bForceRootLock = bLock;
+			if (Animation->bForceRootLock != bLock)
+			{
+				Animation->bForceRootLock = bLock;
+
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
 		}
 	}
 }
@@ -49,7 +55,13 @@ void USimpleAnimAssetEditorLib::SetAnimEnableRootMotion(bool bEnableRootMotion,
 	{
 		if (IsValid(Animation))
 		{
-			Animation->bEnableRootMotion = bEnableRootMotion;
+			if (Animation->bEnableRootMotion != bEnableRootMotion)
+			{
+				Animation->bEnableRootMotion = bEnableRootMotion;
+
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
 		}
 	}
 }
@@ -107,6 +119,9 @@ void USimpleAnimAssetEditorLib::RemoveAllAnimCurves(const TArray<UAnimSequence*>
 		if (IsValid(Animation))
 		{
 			UAnimationBlueprintLibrary::RemoveAllCurveData(Animation);
+			
+			// ReSharper disable once CppExpressionWithoutSideEffects
+			Animation->MarkPackageDirty();
 		}
 	}
 }
@@ -118,6 +133,9 @@ void USimpleAnimAssetEditorLib::RemoveAllAnimNotifies(const TArray<UAnimSequence
 		if (IsValid(Animation))
 		{
 			UAnimationBlueprintLibrary::RemoveAllAnimationNotifyTracks(Animation);
+
+			// ReSharper disable once CppExpressionWithoutSideEffects
+			Animation->MarkPackageDirty();
 		}
 	}
 }
