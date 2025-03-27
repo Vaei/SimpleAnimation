@@ -1,8 +1,8 @@
 ﻿using UnrealBuildTool;
 
-public class SimpleAnimationEditor : ModuleRules
+public class SimpleAnimationModifiers : ModuleRules
 {
-    public SimpleAnimationEditor(ReadOnlyTargetRules Target) : base(Target)
+    public SimpleAnimationModifiers(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -10,6 +10,8 @@ public class SimpleAnimationEditor : ModuleRules
             new string[]
             {
                 "Core",
+                "AnimationModifiers",
+                "AnimationBlueprintLibrary",
             }
         );
 
@@ -18,10 +20,6 @@ public class SimpleAnimationEditor : ModuleRules
             {
                 "CoreUObject",
                 "Engine",
-                "UnrealEd",
-                "AnimationBlueprintLibrary", 
-                "AnimationModifiers",
-                "AssetRegistry",
             }
         );
     }

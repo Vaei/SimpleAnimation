@@ -53,6 +53,14 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void PrintAllAssetsToMessageLog(const TArray<UObject*>& Assets, FName LogName="AssetCheck", bool bOpenMessageLog=true);
 
+	/** Useful for finding and validating all anims assigned to an anim blueprint */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation", meta=(DisplayName="Get Asset Dependencies (Name)"))
+	static TArray<FName> GetAssetDependencies_Name(const UObject* Asset);
+
+	/** Useful for finding and validating all anims assigned to an anim blueprint */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation", meta=(DisplayName="Get Asset Dependencies (String)"))
+	static TArray<FString> GetAssetDependencies(const UObject* Asset);
+	
 protected:
 	/** @return Num anim modifiers removed */
 	static int32 RemoveAllAnimModifiers_Internal(UAnimSequence* Animation);

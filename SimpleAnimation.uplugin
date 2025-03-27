@@ -1,7 +1,7 @@
 ﻿{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.2.0",
+	"VersionName": "1.3.0",
 	"FriendlyName": "SimpleAnimation",
 	"Description": "A simple library of animation tools",
 	"Category": "Animation",
@@ -23,6 +23,11 @@
 			"Name": "SimpleAnimationEditor",
 			"Type": "Editor",
 			"LoadingPhase": "PreDefault"
+		},
+		{
+			"Name": "SimpleAnimationModifiers",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
 		}
 	]
 }
