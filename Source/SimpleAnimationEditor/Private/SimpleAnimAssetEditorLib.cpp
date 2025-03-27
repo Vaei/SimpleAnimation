@@ -6,6 +6,9 @@
 #include "AnimationBlueprintLibrary.h"
 #include "AnimationModifier.h"
 #include "AnimationModifiersAssetUserData.h"
+#include "PackageTools.h"
+#include "AssetRegistry/AssetRegistryHelpers.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/UObjectToken.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimAssetEditorLib)
@@ -172,7 +175,13 @@ void USimpleAnimAssetEditorLib::AddAnimModifiers(const TArray<UAnimSequence*>& A
 		return;
 	}
 
-	TArray<UAnimationModifiersAssetUserData*> AssetUserData;
+	struct FAssetDataPair
+	{
+		UAnimationModifiersAssetUserData* UserData;
+		UAnimSequence* Animation;
+	};
+
+	TArray<FAssetDataPair> AssetUserData;
 	for (UAnimSequence* Animation : Animations)
 	{
 		CloseAllAnimationEditors(Animation);
@@ -189,25 +198,32 @@ void USimpleAnimAssetEditorLib::AddAnimModifiers(const TArray<UAnimSequence*>& A
 			Animation->MarkPackageDirty();
 		}
 		
-		AssetUserData.Add(UserData);
+		AssetUserData.Add({ UserData, Animation });
 	}
 
 	// For each added modifier create add a new instance to each of the user data entries, using the one(s) set up in the window as template(s)
 	UE::Anim::FApplyModifiersScope Scope;
 	for (const TSubclassOf<UAnimationModifier>& Modifier : Modifiers)
 	{
-		for (UAnimationModifiersAssetUserData* UserData : AssetUserData)
+		for (const FAssetDataPair& UserDataPair : AssetUserData)
 		{
-			const bool bAlreadyContainsModifier = UserData->GetAnimationModifierInstances().ContainsByPredicate([Modifier](const UAnimationModifier* TestModifier) { return Modifier == TestModifier->GetClass(); });
+			UAnimationModifiersAssetUserData* UserData = UserDataPair.UserData;
+			const bool bAlreadyContainsModifier = UserData->GetAnimationModifierInstances().ContainsByPredicate(
+				[Modifier](const UAnimationModifier* TestModifier)
+				{
+					return Modifier == TestModifier->GetClass();
+				});
+
+			UAnimationModifier* Processor = CreateModifierInstance(UserData, Modifier, Modifier.GetDefaultObject());
 
 			if (!bAlreadyContainsModifier)
 			{
-				UObject* Outer = UserData;
-				UAnimationModifier* Processor = CreateModifierInstance(Outer, Modifier, Modifier.GetDefaultObject());
 				const TArray<UAnimationModifier*>& Instances = UserData->GetAnimationModifierInstances();
 				TArray<UAnimationModifier*>& MutableInstances = const_cast<TArray<UAnimationModifier*>&>(Instances);
 				MutableInstances.Add(Processor);
 			}
+			
+			Processor->ApplyToAnimationSequence(UserDataPair.Animation);
 		}
 	}
 }
@@ -237,6 +253,27 @@ void USimpleAnimAssetEditorLib::PrintAllAssetsToMessageLog(const TArray<UObject*
 	{
 		MsgLog.Open();
 	}
+}
+
+TArray<FName> USimpleAnimAssetEditorLib::GetAssetDependencies_Name(const UObject* Asset)
+{
+	const FString PackageName = UPackageTools::FilenameToPackageName(Asset->GetPackage()->GetName());
+
+	const IAssetRegistry* AssetRegistry = IAssetRegistry::Get();
+	constexpr FAssetRegistryDependencyOptions Options { true, true, false, false, false };
+	TArray<FName> Dependencies;
+	AssetRegistry->K2_GetDependencies(FName(PackageName), Options, Dependencies);
+	return Dependencies;
+}
+
+TArray<FString> USimpleAnimAssetEditorLib::GetAssetDependencies(const UObject* Asset)
+{
+	const TArray<FName> DependencyNames = GetAssetDependencies_Name(Asset);
+
+	TArray<FString> StringNames;
+	Algo::Transform(DependencyNames, StringNames, [](FName Name) { return Name.ToString(); });
+	
+	return StringNames;
 }
 
 int32 USimpleAnimAssetEditorLib::RemoveAllAnimModifiers_Internal(UAnimSequence* Animation)

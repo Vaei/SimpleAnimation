@@ -4,6 +4,11 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.0
+* Add Copy IK Bones anim modifier
+* Fix `AddAnimModifiers()` not reapplying existing modifiers
+* Add `GetAssetDependencies()` functions
+
 ### 1.2.0
 * Add asset editor tooling
 
