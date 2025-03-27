@@ -3,7 +3,10 @@
 
 #include "SimpleAnimLib.h"
 
+#if UE_ENABLE_DEBUG_DRAWING
 #include "PhysicsEngine/BodySetup.h"
+#include "Components/CapsuleComponent.h"
+#endif
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimLib)
 
@@ -109,5 +112,61 @@ void USimpleAnimLib::DrawDebugPhysicsBodies(USkeletalMeshComponent* Mesh, FLinea
 				bPersistentLines, Duration, 0, Thickness);
 		}
 	}
+#endif
+}
+
+void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComponent* Mesh, const bool bDrawAuthority,
+	const bool bDrawLocal, const bool bDrawSimulated, FLinearColor AuthColor, FLinearColor LocalColor,
+	FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
+{
+#if UE_ENABLE_DEBUG_DRAWING
+	// Check if we have a valid pawn that isn't pending kill
+	if (!IsValid(Pawn))
+	{
+		return;
+	}
+
+	// Determine the role of the pawn
+	const ENetRole NetRole = Pawn->GetLocalRole();
+
+	// Check if we should draw based on the role
+	FLinearColor Color;
+	switch (NetRole)
+	{
+	case ROLE_SimulatedProxy:
+		if (!bDrawSimulated) { return; }
+		Color = SimulatedColor;
+		break;
+	case ROLE_AutonomousProxy:
+		if (!bDrawLocal) { return; }
+		Color = LocalColor;
+		break;
+	case ROLE_Authority:
+		if (!bDrawAuthority) { return; }
+		Color = AuthColor;
+		break;
+	default: return;
+	}
+
+	// Draw the capsule
+	DrawDebugPhysicsCapsule(Mesh, Color, bPersistentLines, Duration, Thickness);
+#endif
+}
+
+void USimpleAnimLib::DrawDebugPhysicsCapsule(const UCapsuleComponent* Capsule, FLinearColor Color, const bool bPersistentLines,
+	const float Duration, const float Thickness)
+{
+#if UE_ENABLE_DEBUG_DRAWING
+	if (!Capsule || !Capsule->GetWorld())
+	{
+		return;
+	}
+
+	const FColor LineColor = Color.ToFColor(true);
+	const UWorld* World = Capsule->GetWorld();
+
+	DrawDebugCapsule(World, Capsule->GetComponentLocation(), Capsule->GetUnscaledCapsuleHalfHeight(),
+		Capsule->GetUnscaledCapsuleRadius(), Capsule->GetComponentQuat(), LineColor, bPersistentLines,
+		Duration, 0, Thickness);
 #endif
 }

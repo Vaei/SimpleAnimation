@@ -8,6 +8,7 @@ Simple animation tools.
 * Add Copy IK Bones anim modifier
 * Fix `AddAnimModifiers()` not reapplying existing modifiers
 * Add `GetAssetDependencies()` functions
+* Improve debug drawing, including added capsule function
 
 ### 1.2.0
 * Add asset editor tooling
