@@ -69,6 +69,22 @@ void USimpleAnimAssetEditorLib::SetAnimEnableRootMotion(bool bEnableRootMotion,
 	}
 }
 
+void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName,
+	float CurveValue, bool bMetaDataCurve)
+{
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			UAnimationBlueprintLibrary::AddCurve(Animation, CurveName, ERawCurveTrackTypes::RCT_Float, bMetaDataCurve);
+			UAnimationBlueprintLibrary::AddFloatCurveKey(Animation, CurveName, 0.f, CurveValue);
+
+			// ReSharper disable once CppExpressionWithoutSideEffects
+			Animation->MarkPackageDirty();
+		}
+	}
+}
+
 TArray<UAnimSequence*> USimpleAnimAssetEditorLib::SetCompressionTypeForAnimations(const TArray<UAnimSequence*>& Animations,
 	UAnimCurveCompressionSettings* CurveCompressionSettings)
 {
