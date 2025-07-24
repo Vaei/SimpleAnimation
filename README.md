@@ -4,6 +4,9 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.1
+* Refactor `DoesAnimationLoop()` to `IsLoopingAnimation()`
+
 ### 1.3.0
 * Add Copy IK Bones anim modifier
 * Fix `AddAnimModifiers()` not reapplying existing modifiers

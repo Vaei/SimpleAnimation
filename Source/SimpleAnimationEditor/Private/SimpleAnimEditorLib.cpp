@@ -145,7 +145,7 @@ void USimpleAnimEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, float>
 	AutoSetTangents(OutKeys);
 }
 
-bool USimpleAnimEditorLib::DoesAnimationLoop(const UAnimSequence* Animation, float DetectionThreshold,
+bool USimpleAnimEditorLib::IsLoopingAnimation(const UAnimSequence* Animation, float DetectionThreshold,
 	bool bIgnoreRootMotion, bool bIgnorePelvis)
 {
 	// Only do this if the animation is looping
