@@ -87,6 +87,18 @@ void USimpleAnimEditorLib::AutoSetTangents(TArray<FRichCurveKey>& OutKeys, float
 void USimpleAnimEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, float>& TimeValueMap,
 	TArray<FRichCurveKey>& OutKeys)
 {
+	SetAutoKeyInterpolation(RCIM_Cubic, TimeValueMap, OutKeys);
+}
+
+void USimpleAnimEditorLib::SetAutoLinearKeyInterpolation(const TMap<float, float>& TimeValueMap,
+	TArray<FRichCurveKey>& OutKeys)
+{
+	SetAutoKeyInterpolation(RCIM_Linear, TimeValueMap, OutKeys);
+}
+
+void USimpleAnimEditorLib::SetAutoKeyInterpolation(ERichCurveInterpMode InterpMode,
+	const TMap<float, float>& TimeValueMap, TArray<FRichCurveKey>& OutKeys)
+{
 	OutKeys.Reset();
 	
 	if (TimeValueMap.Num() <= 1)
@@ -99,15 +111,15 @@ void USimpleAnimEditorLib::SetAutoCubicKeyInterpolation(const TMap<float, float>
 		FRichCurveKey& Key = OutKeys.AddDefaulted_GetRef();
 		Key.Time = Itr.Key;
 		Key.Value = Itr.Value;
-		Key.InterpMode = RCIM_Cubic;
+		Key.InterpMode = InterpMode;
 		Key.TangentMode = RCTM_Auto;
 		Key.TangentWeightMode = RCTWM_WeightedNone;
 		Key.ArriveTangent = 0.f;
 		Key.LeaveTangent = 0.f;
 	}
 
-	FRichCurveKey FirstKey = OutKeys[0];
-	FRichCurveKey LastKey  = OutKeys.Last();
+	const FRichCurveKey FirstKey = OutKeys[0];
+	const FRichCurveKey LastKey  = OutKeys.Last();
 	FRichCurveKey PrevKey = FirstKey;
 	FRichCurveKey NextKey = OutKeys[1];
 
@@ -197,24 +209,23 @@ void USimpleAnimEditorLib::GetPoseForTime(const UAnimSequenceBase* Animation, TA
 	{
 		const FName BoneName = RefSkeleton.GetBoneName(BoneIndex);
 		FTransform BoneTransform;
-		GetBonePoseForTime(Animation, BoneName, Time, true, BoneTransform);
+		GetBonePoseForTime(Animation, BoneName, Time, BoneTransform);
 		Transforms[BoneIndex] = BoneTransform;
 	}
 }
 
-void USimpleAnimEditorLib::GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time,
-	bool bExtractRootMotion, FTransform& Pose)
+void USimpleAnimEditorLib::GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time, FTransform& Pose)
 {
 	Pose.SetIdentity();
 	TArray<FName> BoneNameArray;
 	TArray<FTransform> PoseArray;
 	BoneNameArray.Add(BoneName);
-	GetBonePosesForTimeInternal(Animation, BoneNameArray, Time, bExtractRootMotion, PoseArray);
+	GetBonePosesForTimeInternal(Animation, BoneNameArray, Time, PoseArray);
 	Pose = PoseArray[0];
 }
 
 void USimpleAnimEditorLib::GetBonePosesForTimeInternal(const UAnimSequenceBase* Animation, TArray<FName> BoneNames,
-	float Time, bool bExtractRootMotion, TArray<FTransform>& Poses)
+	float Time, TArray<FTransform>& Poses)
 {
 	Poses.Empty(BoneNames.Num());
 	if (Animation && Animation->GetSkeleton())
