@@ -32,7 +32,7 @@ public:
 	 *
 	 * Ignoring pelvis is sometimes useful because sometimes animations erroneously have root motion on the pelvis.
 	 */
-	static bool DoesAnimationLoop(const UAnimSequence* Animation, float DetectionThreshold = 5.f,
+	static bool IsLoopingAnimation(const UAnimSequence* Animation, float DetectionThreshold = 5.f,
 		bool bIgnoreRootMotion = true, bool bIgnorePelvis = false);
 
 	static bool CompareBoneTransforms(const TArray<FTransform>& TransformsA, const TArray<FTransform>& TransformsB, float Tolerance = KINDA_SMALL_NUMBER);
