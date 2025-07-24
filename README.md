@@ -4,6 +4,10 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.2
+* Improve auto curve interpolation options 
+* Remove redundant bExtractRootMotion param
+
 ### 1.3.1
 * Refactor `DoesAnimationLoop()` to `IsLoopingAnimation()`
 

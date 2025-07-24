@@ -23,6 +23,12 @@ public:
 	UFUNCTION(BlueprintPure, Category=SimpleAnimation)
 	static void SetAutoCubicKeyInterpolation(const TMap<float, float>& TimeValueMap, TArray<FRichCurveKey>& OutKeys);
 
+	/** The same as pressing '4' with animation curve keys selected in the editor */
+	UFUNCTION(BlueprintPure, Category=SimpleAnimation)
+	static void SetAutoLinearKeyInterpolation(const TMap<float, float>& TimeValueMap, TArray<FRichCurveKey>& OutKeys);
+	
+	static void SetAutoKeyInterpolation(ERichCurveInterpMode InterpMode, const TMap<float, float>& TimeValueMap, TArray<FRichCurveKey>& OutKeys);
+	
 	/**
 	 * @return True if the poses ( TArray<FTransform> ) at the start and end of the animation are within the Detection
 	 * Threshold. Don't use small numbers because a proper looping animation isn't identical, but 1 frame apart
@@ -38,6 +44,6 @@ public:
 	static bool CompareBoneTransforms(const TArray<FTransform>& TransformsA, const TArray<FTransform>& TransformsB, float Tolerance = KINDA_SMALL_NUMBER);
 
 	static void GetPoseForTime(const UAnimSequenceBase* Animation, TArray<FTransform>& Transforms, float Time);
-	static void GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time, bool bExtractRootMotion, FTransform& Pose);
-	static void GetBonePosesForTimeInternal(const UAnimSequenceBase* Animation, TArray<FName> BoneNames, float Time, bool bExtractRootMotion, TArray<FTransform>& Poses);
+	static void GetBonePoseForTime(const UAnimSequenceBase* Animation, FName BoneName, float Time, FTransform& Pose);
+	static void GetBonePosesForTimeInternal(const UAnimSequenceBase* Animation, TArray<FName> BoneNames, float Time, TArray<FTransform>& Poses);
 };
