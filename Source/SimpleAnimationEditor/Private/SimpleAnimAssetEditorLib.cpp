@@ -76,6 +76,12 @@ void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequence*>& 
 	{
 		if (IsValid(Animation))
 		{
+			if (UAnimationBlueprintLibrary::DoesCurveExist(Animation, CurveName, ERawCurveTrackTypes::RCT_Float))
+			{
+				// If the curve already exists, remove it first
+				UAnimationBlueprintLibrary::RemoveCurve(Animation, CurveName);
+			}
+			
 			UAnimationBlueprintLibrary::AddCurve(Animation, CurveName, ERawCurveTrackTypes::RCT_Float, bMetaDataCurve);
 			UAnimationBlueprintLibrary::AddFloatCurveKey(Animation, CurveName, 0.f, CurveValue);
 
