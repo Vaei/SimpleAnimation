@@ -28,6 +28,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void AddAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName, float CurveValue = 1.f, bool bMetaDataCurve = true);
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void RemoveAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName);
 	
 	/** @return Any animations whose compression type changed */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")

@@ -91,6 +91,24 @@ void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequence*>& 
 	}
 }
 
+void USimpleAnimAssetEditorLib::RemoveAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName)
+{
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			if (UAnimationBlueprintLibrary::DoesCurveExist(Animation, CurveName, ERawCurveTrackTypes::RCT_Float))
+			{
+				// If the curve already exists, remove it first
+				UAnimationBlueprintLibrary::RemoveCurve(Animation, CurveName);
+
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
+		}
+	}
+}
+
 TArray<UAnimSequence*> USimpleAnimAssetEditorLib::SetCompressionTypeForAnimations(const TArray<UAnimSequence*>& Animations,
 	UAnimCurveCompressionSettings* CurveCompressionSettings)
 {
