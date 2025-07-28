@@ -10,6 +10,7 @@ public class SimpleAnimationEditor : ModuleRules
             new string[]
             {
                 "Core",
+                "DeveloperSettings",
             }
         );
 

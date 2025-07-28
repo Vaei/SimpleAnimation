@@ -20,6 +20,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Editor|Animation", CallInEditor, meta=(DeterminesOutputType="CastToClass", DynamicOutputParam="Result"))
 	static void EditorCastArrayChecked(TArray<UObject*> ArrayToCast, TSubclassOf<UObject> CastToClass, TArray<UObject*>& Result);
 
+	/** Apply default mesh set in USimpleAnimationDeveloperSettings as the preview mesh */
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void ApplyPreviewMesh(const TArray<UAnimSequence*>& Animations);
+	
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void SetAnimRootLock(bool bLock, const TArray<UAnimSequence*>& Animations);
 

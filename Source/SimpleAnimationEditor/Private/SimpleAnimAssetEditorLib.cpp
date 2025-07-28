@@ -7,6 +7,7 @@
 #include "AnimationModifier.h"
 #include "AnimationModifiersAssetUserData.h"
 #include "PackageTools.h"
+#include "SimpleAnimationDeveloperSettings.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/UObjectToken.h"
@@ -30,6 +31,36 @@ void USimpleAnimAssetEditorLib::EditorCastArrayChecked(TArray<UObject*> ArrayToC
 		if (IsValid(ObjectToCast))
 		{
 			Result.Add(ObjectToCast);
+		}
+	}
+}
+
+void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& Animations)
+{
+	const USimpleAnimationDeveloperSettings* Settings = USimpleAnimationDeveloperSettings::Get();
+	USkeletalMesh* PreviewMesh = Settings->DefaultSkeletalMesh.LoadSynchronous();
+	if (!IsValid(PreviewMesh))
+	{
+		FMessageLog("AssetCheck")
+			.Error()
+			->AddToken(FUObjectToken::Create(Settings, LOCTEXT("NoDefaultSkeletalMesh", "No default skeletal mesh set in Simple Animation Settings.")))
+			->AddToken(FTextToken::Create(LOCTEXT("ApplyPreviewMeshError", "Please set a default skeletal mesh in the Simple Animation Settings.")));
+		FMessageLog("AssetCheck").Open();
+		return;
+	}
+	
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			USkeletalMesh* CurrentPreviewMesh = Animation->GetPreviewMesh();
+			if (Animation->GetPreviewMesh() != PreviewMesh)
+			{
+				Animation->SetPreviewMesh(PreviewMesh, true);
+
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
 		}
 	}
 }
