@@ -4,6 +4,11 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.5
+* Fix deprecation warning for 5.6
+* Remove unnecessary include
+* Fix copyright
+
 ### 1.3.4
 * Add script `USimpleAnimAssetEditorLib::ApplyPreviewMesh()`
 	* This will bulk apply the preview mesh assigned in `USimpleAnimationDeveloperSettings`
