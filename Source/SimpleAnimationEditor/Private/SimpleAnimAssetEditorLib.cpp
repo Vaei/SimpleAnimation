@@ -53,7 +53,6 @@ void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& A
 	{
 		if (IsValid(Animation))
 		{
-			USkeletalMesh* CurrentPreviewMesh = Animation->GetPreviewMesh();
 			if (Animation->GetPreviewMesh() != PreviewMesh)
 			{
 				Animation->SetPreviewMesh(PreviewMesh, true);
