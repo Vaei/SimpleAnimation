@@ -170,7 +170,7 @@ void USimpleAnimAssetEditorLib::CompressAnimations(const TArray<UAnimSequence*>&
 		{
 			if (const ITargetPlatform* RunningPlatform = GetTargetPlatformManagerRef().GetRunningTargetPlatform())
 			{
-				Animation->CacheDerivedData(RunningPlatform);
+				Animation->CacheDerivedDataForPlatform(RunningPlatform);
 		
 				// ReSharper disable once CppExpressionWithoutSideEffects
 				Animation->MarkPackageDirty();
