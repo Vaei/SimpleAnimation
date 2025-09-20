@@ -4,6 +4,9 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.6
+* Added SetImportRotation function
+
 ### 1.3.5
 * Fix deprecation warning for 5.6
 * Remove unnecessary include
