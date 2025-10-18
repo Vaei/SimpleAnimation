@@ -58,6 +58,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void AddAnimModifiers(const TArray<UAnimSequence*>& Animations, const TArray<TSubclassOf<UAnimationModifier>>& Modifiers);
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void SetImportRotation(const TArray<UAnimSequence*>& Animations, FRotator Rotation, bool bReimport=false);
 	
 	/** Print all assets to the message log */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")

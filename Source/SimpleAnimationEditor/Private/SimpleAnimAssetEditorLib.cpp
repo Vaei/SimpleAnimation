@@ -6,10 +6,13 @@
 #include "AnimationBlueprintLibrary.h"
 #include "AnimationModifier.h"
 #include "AnimationModifiersAssetUserData.h"
+#include "EditorReimportHandler.h"
 #include "PackageTools.h"
 #include "SimpleAnimationDeveloperSettings.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "EditorFramework/AssetImportData.h"
+#include "Factories/FbxAssetImportData.h"
 #include "Misc/UObjectToken.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimAssetEditorLib)
@@ -295,6 +298,40 @@ void USimpleAnimAssetEditorLib::AddAnimModifiers(const TArray<UAnimSequence*>& A
 			}
 			
 			Processor->ApplyToAnimationSequence(UserDataPair.Animation);
+		}
+	}
+}
+
+void USimpleAnimAssetEditorLib::SetImportRotation(const TArray<UAnimSequence*>& Animations, FRotator Rotation,
+	bool bReimport)
+{
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			TObjectPtr<UAssetImportData>& BaseImportData = Animation->AssetImportData;
+			if (!IsValid(BaseImportData))
+			{
+				continue;
+			}
+
+			TObjectPtr<UFbxAssetImportData> FbxImportData = Cast<UFbxAssetImportData>(BaseImportData);
+			if (!IsValid(FbxImportData))
+			{
+				continue;
+			}
+
+			FbxImportData->ImportRotation = Rotation;
+
+			if (bReimport)
+			{
+				FReimportManager::Instance()->Reimport(Animation, false, false);
+			}
+			else
+			{
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
 		}
 	}
 }
