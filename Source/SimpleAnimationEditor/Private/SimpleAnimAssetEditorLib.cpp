@@ -53,7 +53,7 @@ void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& A
 	{
 		if (IsValid(Animation))
 		{
-			USkeletalMesh* CurrentPreviewMesh = Animation->GetPreviewMesh();
+			// USkeletalMesh* CurrentPreviewMesh = Animation->GetPreviewMesh();
 			if (Animation->GetPreviewMesh() != PreviewMesh)
 			{
 				Animation->SetPreviewMesh(PreviewMesh, true);
@@ -171,7 +171,7 @@ void USimpleAnimAssetEditorLib::CompressAnimations(const TArray<UAnimSequence*>&
 		{
 			if (const ITargetPlatform* RunningPlatform = GetTargetPlatformManagerRef().GetRunningTargetPlatform())
 			{
-				Animation->CacheDerivedData(RunningPlatform);
+				Animation->CacheDerivedDataForPlatform(RunningPlatform);
 		
 				// ReSharper disable once CppExpressionWithoutSideEffects
 				Animation->MarkPackageDirty();
