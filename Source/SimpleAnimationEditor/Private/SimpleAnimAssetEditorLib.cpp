@@ -278,22 +278,28 @@ void USimpleAnimAssetEditorLib::AddAnimModifiers(const TArray<UAnimSequence*>& A
 		for (const FAssetDataPair& UserDataPair : AssetUserData)
 		{
 			UAnimationModifiersAssetUserData* UserData = UserDataPair.UserData;
-			const bool bAlreadyContainsModifier = UserData->GetAnimationModifierInstances().ContainsByPredicate(
+			UAnimationModifier* const* ExistingModifier = UserData->GetAnimationModifierInstances().FindByPredicate(
 				[Modifier](const UAnimationModifier* TestModifier)
 				{
 					return Modifier == TestModifier->GetClass();
 				});
-
-			UAnimationModifier* Processor = CreateModifierInstance(UserData, Modifier, Modifier.GetDefaultObject());
+			const bool bAlreadyContainsModifier = ExistingModifier != nullptr;
 
 			if (!bAlreadyContainsModifier)
 			{
+				UAnimationModifier* Processor = CreateModifierInstance(UserData, Modifier, Modifier.GetDefaultObject());
 				const TArray<UAnimationModifier*>& Instances = UserData->GetAnimationModifierInstances();
 				TArray<UAnimationModifier*>& MutableInstances = const_cast<TArray<UAnimationModifier*>&>(Instances);
 				MutableInstances.Add(Processor);
+				Processor->ApplyToAnimationSequence(UserDataPair.Animation);
 			}
-			
-			Processor->ApplyToAnimationSequence(UserDataPair.Animation);
+			else
+			{
+				// Reapply the existing modifier instead of adding a new one
+				// We cannot get a non-const because Epic protected and used friend classes
+				const UAnimationModifier* MutableModifier = const_cast<UAnimationModifier*>(*ExistingModifier);
+				MutableModifier->ApplyToAnimationSequence(UserDataPair.Animation);
+			}
 		}
 	}
 }
