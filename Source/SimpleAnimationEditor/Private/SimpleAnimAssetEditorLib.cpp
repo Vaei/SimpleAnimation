@@ -1,4 +1,4 @@
-﻿// Copyright (c) Jared Taylor. All Rights Reserved
+﻿// Copyright (c) Jared Taylor
 
 
 #include "SimpleAnimAssetEditorLib.h"
@@ -6,10 +6,13 @@
 #include "AnimationBlueprintLibrary.h"
 #include "AnimationModifier.h"
 #include "AnimationModifiersAssetUserData.h"
+#include "EditorReimportHandler.h"
 #include "PackageTools.h"
 #include "SimpleAnimationDeveloperSettings.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "EditorFramework/AssetImportData.h"
+#include "Factories/FbxAssetImportData.h"
 #include "Misc/UObjectToken.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimAssetEditorLib)
@@ -53,6 +56,7 @@ void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& A
 	{
 		if (IsValid(Animation))
 		{
+			// USkeletalMesh* CurrentPreviewMesh = Animation->GetPreviewMesh();
 			if (Animation->GetPreviewMesh() != PreviewMesh)
 			{
 				Animation->SetPreviewMesh(PreviewMesh, true);
@@ -299,6 +303,40 @@ void USimpleAnimAssetEditorLib::AddAnimModifiers(const TArray<UAnimSequence*>& A
 				// We cannot get a non-const because Epic protected and used friend classes
 				const UAnimationModifier* MutableModifier = const_cast<UAnimationModifier*>(*ExistingModifier);
 				MutableModifier->ApplyToAnimationSequence(UserDataPair.Animation);
+			}
+		}
+	}
+}
+
+void USimpleAnimAssetEditorLib::SetImportRotation(const TArray<UAnimSequence*>& Animations, FRotator Rotation,
+	bool bReimport)
+{
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			TObjectPtr<UAssetImportData>& BaseImportData = Animation->AssetImportData;
+			if (!IsValid(BaseImportData))
+			{
+				continue;
+			}
+
+			TObjectPtr<UFbxAssetImportData> FbxImportData = Cast<UFbxAssetImportData>(BaseImportData);
+			if (!IsValid(FbxImportData))
+			{
+				continue;
+			}
+
+			FbxImportData->ImportRotation = Rotation;
+
+			if (bReimport)
+			{
+				FReimportManager::Instance()->Reimport(Animation, false, false);
+			}
+			else
+			{
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
 			}
 		}
 	}
