@@ -4,6 +4,9 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.7
+* Fix bug where `USimpleAnimAssetEditorLib::AddAnimModifiers()` was trying to apply a new instance instead of reapplying existing, causing old notifies created by the modifier to get dumped in another track
+
 ### 1.3.6
 * Added SetImportRotation function
 
