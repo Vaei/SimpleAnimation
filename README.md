@@ -4,6 +4,10 @@ Simple animation tools.
 
 ## Changelog
 
+### 1.3.8
+* Add `UAnimMontage` tooling to setup blend settings, the slot, and bulk add notifies
+* Change from `UAnimSequence` to `UAnimSequenceBase` to enable support for montage
+
 ### 1.3.7
 * Fix bug where `USimpleAnimAssetEditorLib::AddAnimModifiers()` was trying to apply a new instance instead of reapplying existing, causing old notifies created by the modifier to get dumped in another track
 

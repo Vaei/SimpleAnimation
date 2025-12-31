@@ -9,6 +9,7 @@
 #include "EditorReimportHandler.h"
 #include "PackageTools.h"
 #include "SimpleAnimationDeveloperSettings.h"
+#include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "EditorFramework/AssetImportData.h"
@@ -38,7 +39,7 @@ void USimpleAnimAssetEditorLib::EditorCastArrayChecked(TArray<UObject*> ArrayToC
 	}
 }
 
-void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& Animations)
+void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations)
 {
 	const USimpleAnimationDeveloperSettings* Settings = USimpleAnimationDeveloperSettings::Get();
 	USkeletalMesh* PreviewMesh = Settings->DefaultSkeletalMesh.LoadSynchronous();
@@ -52,7 +53,7 @@ void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequence*>& A
 		return;
 	}
 	
-	for (UAnimSequence* Animation : Animations)
+	for (UAnimSequenceBase* Animation : Animations)
 	{
 		if (IsValid(Animation))
 		{
@@ -103,10 +104,10 @@ void USimpleAnimAssetEditorLib::SetAnimEnableRootMotion(bool bEnableRootMotion,
 	}
 }
 
-void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName,
+void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequenceBase*>& Animations, FName CurveName,
 	float CurveValue, bool bMetaDataCurve)
 {
-	for (UAnimSequence* Animation : Animations)
+	for (UAnimSequenceBase* Animation : Animations)
 	{
 		if (IsValid(Animation))
 		{
@@ -125,9 +126,9 @@ void USimpleAnimAssetEditorLib::AddAnimFloatCurve(const TArray<UAnimSequence*>& 
 	}
 }
 
-void USimpleAnimAssetEditorLib::RemoveAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName)
+void USimpleAnimAssetEditorLib::RemoveAnimFloatCurve(const TArray<UAnimSequenceBase*>& Animations, FName CurveName)
 {
-	for (UAnimSequence* Animation : Animations)
+	for (UAnimSequenceBase* Animation : Animations)
 	{
 		if (IsValid(Animation))
 		{
@@ -183,15 +184,15 @@ void USimpleAnimAssetEditorLib::CompressAnimations(const TArray<UAnimSequence*>&
 	}
 }
 
-void USimpleAnimAssetEditorLib::CloseAllAnimationEditors(UAnimSequence* Animation)
+void USimpleAnimAssetEditorLib::CloseAllAnimationEditors(UAnimSequenceBase* Animation)
 {
 	UAssetEditorSubsystem* AssetEditorSubsystem = GEditor->GetEditorSubsystem<UAssetEditorSubsystem>();
 	AssetEditorSubsystem->CloseAllEditorsForAsset(Animation);
 }
 
-void USimpleAnimAssetEditorLib::RemoveAllAnimCurves(const TArray<UAnimSequence*>& Animations)
+void USimpleAnimAssetEditorLib::RemoveAllAnimCurves(const TArray<UAnimSequenceBase*>& Animations)
 {
-	for (UAnimSequence* Animation : Animations)
+	for (UAnimSequenceBase* Animation : Animations)
 	{
 		if (IsValid(Animation))
 		{
@@ -203,9 +204,9 @@ void USimpleAnimAssetEditorLib::RemoveAllAnimCurves(const TArray<UAnimSequence*>
 	}
 }
 
-void USimpleAnimAssetEditorLib::RemoveAllAnimNotifies(const TArray<UAnimSequence*>& Animations)
+void USimpleAnimAssetEditorLib::RemoveAllAnimNotifies(const TArray<UAnimSequenceBase*>& Animations)
 {
-	for (UAnimSequence* Animation : Animations)
+	for (UAnimSequenceBase* Animation : Animations)
 	{
 		if (IsValid(Animation))
 		{
@@ -424,6 +425,123 @@ UAnimationModifier* USimpleAnimAssetEditorLib::CreateModifierInstance(UObject* O
 	checkf(ProcessorInstance, TEXT("Unable to instantiate modifier class"));
 	ProcessorInstance->SetFlags(RF_Transactional);
 	return ProcessorInstance;
+}
+
+void USimpleAnimAssetEditorLib::SetMontageBlendSettings(const TArray<UAnimMontage*>& Montages,
+	FMontageBlendSettings BlendIn, FMontageBlendSettings BlendOut, float BlendOutTriggerTime, bool bEnableAutoBlendOut)
+{
+	for (UAnimMontage* Montage : Montages)
+	{
+		if (IsValid(Montage))
+		{
+			Montage->BlendModeIn = BlendIn.BlendMode;
+			Montage->BlendModeOut = BlendOut.BlendMode;
+			
+			Montage->BlendIn.SetBlendTime(BlendIn.Blend.BlendTime);
+			Montage->BlendIn.SetBlendOption(BlendIn.Blend.BlendOption);
+			Montage->BlendIn.SetCustomCurve(BlendIn.Blend.CustomCurve);
+			
+			Montage->BlendOut.SetBlendOption(BlendOut.Blend.BlendOption);
+			Montage->BlendOut.SetBlendTime(BlendOut.Blend.BlendTime);
+			Montage->BlendOut.SetCustomCurve(BlendOut.Blend.CustomCurve);
+			
+			Montage->BlendOutTriggerTime = BlendOutTriggerTime;
+			Montage->bEnableAutoBlendOut = bEnableAutoBlendOut;
+			
+			Montage->BlendProfileIn = BlendIn.BlendProfile;
+			Montage->BlendProfileOut = BlendOut.BlendProfile;
+
+			// ReSharper disable once CppExpressionWithoutSideEffects
+			Montage->MarkPackageDirty();
+		}
+	}
+}
+
+void USimpleAnimAssetEditorLib::SetMontageFirstSlotName(const TArray<UAnimMontage*>& Montages, FName SlotName)
+{
+	for (UAnimMontage* Montage : Montages)
+	{
+		if (IsValid(Montage))
+		{
+			if (Montage->SlotAnimTracks.Num() > 0)
+			{
+				FName CurrentSlotName = Montage->SlotAnimTracks[0].SlotName;
+				if (!CurrentSlotName.IsEqual(SlotName))
+				{
+					Montage->SlotAnimTracks[0].SlotName = SlotName;
+
+					// ReSharper disable once CppExpressionWithoutSideEffects
+					Montage->MarkPackageDirty();
+				}
+			}
+		}
+	}
+}
+
+void USimpleAnimAssetEditorLib::BulkAddMontageNotifies(const TArray<UAnimMontage*>& Montages,
+	const TArray<TSubclassOf<UAnimNotify>>& NotifyClasses,
+	const TArray<TSubclassOf<UAnimNotifyState>>& NotifyStateClasses, float NotifyTime, float NotifyDuration,
+	bool bIndividualTracks, bool bSkipIfTrackExists, FName SingleTrackName)
+{
+	for (UAnimMontage* Montage : Montages)
+	{
+		if (IsValid(Montage))
+		{
+			bool bAnyChange = false;
+			
+			for (const TSubclassOf<UAnimNotify> NotifyClass : NotifyClasses)
+			{
+				const FName NotifyTrackName = bIndividualTracks ? NotifyClass->GetFName() : SingleTrackName;
+				if (!UAnimationBlueprintLibrary::IsValidAnimNotifyTrackName(Montage, NotifyTrackName))
+				{
+					UAnimationBlueprintLibrary::AddAnimationNotifyTrack(Montage, NotifyTrackName);
+				}
+				else if (bSkipIfTrackExists)
+				{
+					continue;
+				}
+				
+				if (!ensure(UAnimationBlueprintLibrary::IsValidAnimNotifyTrackName(Montage, NotifyTrackName)))
+				{
+					continue;
+				}
+				
+				if (UAnimationBlueprintLibrary::AddAnimationNotifyEvent(Montage, NotifyTrackName, NotifyTime, NotifyClass))
+				{
+					bAnyChange = true;
+				}
+			}
+			
+			for (const TSubclassOf<UAnimNotifyState> NotifyStateClass : NotifyStateClasses)
+			{
+				const FName NotifyTrackName = bIndividualTracks ? NotifyStateClass->GetFName() : SingleTrackName;
+				if (!UAnimationBlueprintLibrary::IsValidAnimNotifyTrackName(Montage, NotifyTrackName))
+				{
+					UAnimationBlueprintLibrary::AddAnimationNotifyTrack(Montage, NotifyTrackName);
+				}
+				else if (bSkipIfTrackExists)
+				{
+					continue;
+				}
+				
+				if (!ensure(UAnimationBlueprintLibrary::IsValidAnimNotifyTrackName(Montage, NotifyTrackName)))
+				{
+					continue;
+				}
+				
+				if (UAnimationBlueprintLibrary::AddAnimationNotifyStateEvent(Montage, NotifyTrackName, NotifyTime, NotifyDuration, NotifyStateClass))
+				{
+					bAnyChange = true;
+				}
+			
+				if (bAnyChange)
+				{
+					// ReSharper disable once CppExpressionWithoutSideEffects
+					Montage->MarkPackageDirty();
+				}
+			}
+		}
+	}
 }
 
 #undef LOCTEXT_NAMESPACE

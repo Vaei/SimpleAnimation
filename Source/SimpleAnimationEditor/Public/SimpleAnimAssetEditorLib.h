@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SimpleAnimAssetEditorLib.generated.h"
 
+struct FMontageBlendSettings;
 class UAnimationModifier;
 /**
  * Functions for editor action utilities for animation assets
@@ -22,7 +23,7 @@ public:
 
 	/** Apply default mesh set in USimpleAnimationDeveloperSettings as the preview mesh */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void ApplyPreviewMesh(const TArray<UAnimSequence*>& Animations);
+	static void ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations);
 	
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void SetAnimRootLock(bool bLock, const TArray<UAnimSequence*>& Animations);
@@ -31,10 +32,10 @@ public:
 	static void SetAnimEnableRootMotion(bool bEnableRootMotion, const TArray<UAnimSequence*>& Animations);
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void AddAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName, float CurveValue = 1.f, bool bMetaDataCurve = true);
+	static void AddAnimFloatCurve(const TArray<UAnimSequenceBase*>& Animations, FName CurveName, float CurveValue = 1.f, bool bMetaDataCurve = true);
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void RemoveAnimFloatCurve(const TArray<UAnimSequence*>& Animations, FName CurveName);
+	static void RemoveAnimFloatCurve(const TArray<UAnimSequenceBase*>& Animations, FName CurveName);
 	
 	/** @return Any animations whose compression type changed */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
@@ -45,13 +46,13 @@ public:
 	
 	/** Modifying an animation while its editor is open isn't always safe */
 	UFUNCTION(BlueprintCallable, Category="Editor|Animation", CallInEditor)
-	static void CloseAllAnimationEditors(UAnimSequence* Animation);
+	static void CloseAllAnimationEditors(UAnimSequenceBase* Animation);
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void RemoveAllAnimCurves(const TArray<UAnimSequence*>& Animations);
+	static void RemoveAllAnimCurves(const TArray<UAnimSequenceBase*>& Animations);
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void RemoveAllAnimNotifies(const TArray<UAnimSequence*>& Animations);
+	static void RemoveAllAnimNotifies(const TArray<UAnimSequenceBase*>& Animations);
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void RemoveAllAnimModifiers(const TArray<UAnimSequence*>& Animations);
@@ -80,4 +81,17 @@ protected:
 
 	/** Creates a new Modifier instance to store with the current asset */
 	static UAnimationModifier* CreateModifierInstance(UObject* Outer, const UClass* InClass, UObject* Template = nullptr);
+	
+public:
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void SetMontageBlendSettings(const TArray<UAnimMontage*>& Montages, FMontageBlendSettings BlendIn, 
+		FMontageBlendSettings BlendOut, float BlendOutTriggerTime = -1.f, bool bEnableAutoBlendOut = true);
+	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void SetMontageFirstSlotName(const TArray<UAnimMontage*>& Montages, FName SlotName);
+	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void BulkAddMontageNotifies(const TArray<UAnimMontage*>& Montages, const TArray<TSubclassOf<UAnimNotify>>& NotifyClasses,
+		const TArray<TSubclassOf<UAnimNotifyState>>& NotifyStateClasses, float NotifyTime = 0.f, float NotifyDuration = 0.5f,
+		bool bIndividualTracks = true, bool bSkipIfTrackExists = false, FName SingleTrackName = TEXT("0"));
 };
