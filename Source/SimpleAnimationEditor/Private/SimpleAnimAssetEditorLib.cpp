@@ -391,6 +391,23 @@ TArray<FString> USimpleAnimAssetEditorLib::GetAssetDependencies(const UObject* A
 	return StringNames;
 }
 
+void USimpleAnimAssetEditorLib::SetAdditiveAnimType(const TArray<UAnimSequence*>& Animations, EAdditiveAnimationType AdditiveType)
+{
+	for (UAnimSequence* Animation : Animations)
+	{
+		if (IsValid(Animation))
+		{
+			if (Animation->AdditiveAnimType != AdditiveType)
+			{
+				Animation->AdditiveAnimType = AdditiveType;
+
+				// ReSharper disable once CppExpressionWithoutSideEffects
+				Animation->MarkPackageDirty();
+			}
+		}
+	}
+}
+
 int32 USimpleAnimAssetEditorLib::RemoveAllAnimModifiers_Internal(UAnimSequence* Animation)
 {
 	if (!IsValid(Animation))

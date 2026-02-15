@@ -75,6 +75,9 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation", meta=(DisplayName="Get Asset Dependencies (String)"))
 	static TArray<FString> GetAssetDependencies(const UObject* Asset);
 	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
+	static void SetAdditiveAnimType(const TArray<UAnimSequence*>& Animations, EAdditiveAnimationType AdditiveType);
+	
 protected:
 	/** @return Num anim modifiers removed */
 	static int32 RemoveAllAnimModifiers_Internal(UAnimSequence* Animation);
