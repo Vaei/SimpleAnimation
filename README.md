@@ -15,9 +15,9 @@ An Unreal Engine plugin providing animation utilities.
 - Bulk preview mesh assignment via developer settings
 
 ### Animation Modifiers
-- **Blend Pose** — Bake a sampled pose into an animation using per-bone weights and blend masks, as override or additive
-- **Blend Transform** — Apply a transform delta across all frames with per-bone masking
-- **Copy IK Bones** — Copy source bone transforms to IK targets at edit time
+- **Blend Pose**: Bake a sampled pose into an animation using per-bone weights and blend masks, as override or additive
+- **Blend Transform**: Apply a transform delta across all frames with per-bone masking
+- **Copy IK Bones**: Copy source bone transforms to IK targets at edit time
 
 ## Changelog
 
