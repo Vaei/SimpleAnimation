@@ -1,8 +1,37 @@
 # Simple Animation
 
-Simple animation tools.
+An Unreal Engine plugin providing animation utilities.
+
+## Overview
+
+### Runtime
+- Debug physics body and capsule visualization with network role awareness (authority, local, simulated)
+
+### Editor Tooling
+- Batch animation asset operations: compression, root motion, curve management, notify cleanup
+- Montage setup helpers for blend settings, slots, and bulk notify assignment
+- Pose inspection and bone transform comparison utilities
+- Curve tangent automation (cubic, linear)
+- Bulk preview mesh assignment via developer settings
+
+### Animation Modifiers
+- **Blend Pose** — Bake a sampled pose into an animation using per-bone weights and blend masks, as override or additive
+- **Blend Transform** — Apply a transform delta across all frames with per-bone masking
+- **Copy IK Bones** — Copy source bone transforms to IK targets at edit time
 
 ## Changelog
+
+### 1.4.0
+_Supports >=UE5.6_
+* Added `UBlendPoseModifier` - Great for adjusting animations for holding a weapon, carrying an object, etc.
+	* Bakes a pose into every frame of the animation its applied to
+	* Can apply as override or local space additive
+	* Performs the equivalent of a `LayeredBlendPerBone` using a Blend Mask
+* Added `UBlendTransformModifier`
+	* Similar to `UBlendPoseModifier` but applies a transform instead of a pose
+* Added more ScriptedAssetActions
+	* Root Motion additional actions
+	* Disable Additive
 
 ### 1.3.8
 * Add `UAnimMontage` tooling to setup blend settings, the slot, and bulk add notifies
