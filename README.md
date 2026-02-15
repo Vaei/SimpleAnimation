@@ -19,6 +19,12 @@ An Unreal Engine plugin providing animation utilities.
 - **Blend Transform**: Apply a transform delta across all frames with per-bone masking
 - **Copy IK Bones**: Copy source bone transforms to IK targets at edit time
 
+## Modifier Preview Videos
+
+https://github.com/user-attachments/assets/31d3b97c-f24f-4ecb-9ef4-db67134d079a
+
+https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
+
 ## Changelog
 
 ### 1.4.0
