@@ -27,6 +27,9 @@ https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
 
 ## Changelog
 
+### 1.4.1
+* Improve default behaviour of `DrawPawnDebugPhysicsBodies()` and `DrawPawnDebugPhysicsCapsule()` by making them treat standalone player-controlled pawns as autonomous proxies
+
 ### 1.4.0
 _Supports >=UE5.6_
 * Added `UBlendPoseModifier` - Great for adjusting animations for holding a weapon, carrying an object, etc.

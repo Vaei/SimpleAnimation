@@ -16,9 +16,9 @@
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimLib)
 
 
-void USimpleAnimLib::DrawPawnDebugPhysicsBodies(APawn* Pawn, USkeletalMeshComponent* Mesh, const bool bDrawAuthority,
-	const bool bDrawLocal, const bool bDrawSimulated, FLinearColor AuthColor, FLinearColor LocalColor,
-	FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
+void USimpleAnimLib::DrawPawnDebugPhysicsBodies(APawn* Pawn, USkeletalMeshComponent* Mesh, const bool bDrawAuthority, 
+	const bool bDrawLocal, const bool bDrawSimulated, bool bStandaloneDrawAuthAsLocal, FLinearColor AuthColor, 
+	FLinearColor LocalColor, FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
 {
 #if UE_ENABLE_DEBUG_DRAWING
 	// Check if we should draw at all
@@ -34,7 +34,13 @@ void USimpleAnimLib::DrawPawnDebugPhysicsBodies(APawn* Pawn, USkeletalMeshCompon
 	}
 
 	// Determine the role of the pawn
-	const ENetRole NetRole = Pawn->GetLocalRole();
+	ENetRole NetRole = Pawn->GetLocalRole();
+	
+	// Treat standalone player-controlled pawns as autonomous proxies
+	if (bStandaloneDrawAuthAsLocal && bDrawLocal && NetRole == ROLE_Authority && Pawn->GetNetMode() == NM_Standalone)
+	{
+		NetRole = ROLE_AutonomousProxy;
+	}
 
 	// Check if we should draw based on the role
 	FLinearColor Color;
@@ -120,9 +126,9 @@ void USimpleAnimLib::DrawDebugPhysicsBodies(USkeletalMeshComponent* Mesh, FLinea
 #endif
 }
 
-void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComponent* Mesh, const bool bDrawAuthority,
-	const bool bDrawLocal, const bool bDrawSimulated, FLinearColor AuthColor, FLinearColor LocalColor,
-	FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
+void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComponent* Mesh, const bool bDrawAuthority, 
+	const bool bDrawLocal, const bool bDrawSimulated, bool bStandaloneDrawAuthAsLocal, FLinearColor AuthColor, 
+	FLinearColor LocalColor, FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
 {
 #if UE_ENABLE_DEBUG_DRAWING
 	// Check if we have a valid pawn that isn't pending kill
@@ -132,7 +138,13 @@ void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComp
 	}
 
 	// Determine the role of the pawn
-	const ENetRole NetRole = Pawn->GetLocalRole();
+	ENetRole NetRole = Pawn->GetLocalRole();
+	
+	// Treat standalone player-controlled pawns as autonomous proxies
+	if (bStandaloneDrawAuthAsLocal && bDrawLocal && NetRole == ROLE_Authority && Pawn->GetNetMode() == NM_Standalone)
+	{
+		NetRole = ROLE_AutonomousProxy;
+	}
 
 	// Check if we should draw based on the role
 	FLinearColor Color;

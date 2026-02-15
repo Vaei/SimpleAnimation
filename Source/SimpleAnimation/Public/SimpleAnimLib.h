@@ -27,6 +27,7 @@ public:
 	 * @param bDrawAuthority Whether to draw physics bodies for the authority role
 	 * @param bDrawLocal Whether to draw physics bodies for the local role
 	 * @param bDrawSimulated Whether to draw physics bodies for the simulated role
+	 * @param bStandaloneDrawAuthAsLocal Whether to treat standalone player-controlled pawns as autonomous proxies
 	 * @param AuthColor The color of the debug lines for the authority role
 	 * @param LocalColor The color of the debug lines for the local role
 	 * @param SimulatedColor The color of the debug lines for the simulated role
@@ -39,6 +40,7 @@ public:
 	static void DrawPawnDebugPhysicsBodies(
 		APawn* Pawn, USkeletalMeshComponent* Mesh,
 		const bool bDrawAuthority = false, const bool bDrawLocal = true, const bool bDrawSimulated = false,
+		bool bStandaloneDrawAuthAsLocal = true,
 		FLinearColor AuthColor = FLinearColor(1.f, 0.5f, 0.f),		// Orange
 		FLinearColor LocalColor = FLinearColor(0.f, 1.f, 1.f),		// Cyan
 		FLinearColor SimulatedColor = FLinearColor(1.f, 0.f, 1.f),   // Magenta
@@ -63,6 +65,7 @@ public:
 	 * @param bDrawAuthority Whether to draw physics bodies for the authority role
 	 * @param bDrawLocal Whether to draw physics bodies for the local role
 	 * @param bDrawSimulated Whether to draw physics bodies for the simulated role
+	 * @param bStandaloneDrawAuthAsLocal Whether to treat standalone player-controlled pawns as autonomous proxies
 	 * @param AuthColor The color of the debug lines for the authority role
 	 * @param LocalColor The color of the debug lines for the local role
 	 * @param SimulatedColor The color of the debug lines for the simulated role
@@ -74,7 +77,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category=SimpleAnimation, meta=(DefaultToSelf="Pawn", DevelopmentOnly))
 	static void DrawPawnDebugPhysicsCapsule(
 		APawn* Pawn, const UCapsuleComponent* Mesh,
-		const bool bDrawAuthority = false, const bool bDrawLocal = true, const bool bDrawSimulated = false,
+		const bool bDrawAuthority = false, const bool bDrawLocal = true, const bool bDrawSimulated = false, 
+		bool bStandaloneDrawAuthAsLocal = true,
 		FLinearColor AuthColor = FLinearColor(1.f, 0.5f, 0.f),		// Orange
 		FLinearColor LocalColor = FLinearColor(0.f, 1.f, 1.f),		// Cyan
 		FLinearColor SimulatedColor = FLinearColor(1.f, 0.f, 1.f),	// Magenta
