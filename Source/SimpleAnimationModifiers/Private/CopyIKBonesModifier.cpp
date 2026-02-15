@@ -4,6 +4,7 @@
 #include "CopyIKBonesModifier.h"
 
 #include "AnimPose.h"
+#include "Animation/AnimSequence.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(CopyIKBonesModifier)
 
@@ -17,11 +18,7 @@ void UCopyIKBonesModifier::OnApply_Implementation(UAnimSequence* Animation)
 	}
 
 	IAnimationDataController& Controller = Animation->GetController();
-#if ENGINE_MINOR_VERSION >= 2
 	const IAnimationDataModel* Model = Animation->GetDataModel();
-#else
-	const UAnimDataModel* Model = Animation->GetDataModel();
-#endif
 
 	if (Model == nullptr)
 	{
@@ -40,17 +37,14 @@ void UCopyIKBonesModifier::OnApply_Implementation(UAnimSequence* Animation)
 			: SourceBoneName(InSourceBoneName), TargetBoneName(InTargetBoneName), SourceBoneIdx(InSourceBoneIdx), TargetBoneIdx(InTargetBoneIdx) {}
 	};
 
-#if ENGINE_MINOR_VERSION >= 2
 	const USkeleton* Skeleton = Animation->GetSkeleton();
 	const FReferenceSkeleton& RefSkeleton = Skeleton->GetReferenceSkeleton();
-#endif
 
 	// Validate input
 	TArray<FCopyBoneData> CopyBoneDataContainer;
 	CopyBoneDataContainer.Reserve(BonesToCopy.Num());
 	for (const FCopyBonePairs& Pair : BonesToCopy)
 	{
-#if ENGINE_MINOR_VERSION >= 2
 		const int32 SourceBoneIdx = RefSkeleton.FindBoneIndex(Pair.SourceBone.BoneName);
 		if (SourceBoneIdx == INDEX_NONE)
 		{
@@ -62,19 +56,6 @@ void UCopyIKBonesModifier::OnApply_Implementation(UAnimSequence* Animation)
 		{
 			continue;
 		}
-#else
-		const int32 SourceBoneIdx = Model->GetBoneTrackIndexByName(Pair.SourceBone.BoneName);
-		if (SourceBoneIdx == INDEX_NONE)
-		{
-			continue;
-		}
-
-		const int32 TargetBoneIdx = Model->GetBoneTrackIndexByName(Pair.TargetBone.BoneName);
-		if (TargetBoneIdx == INDEX_NONE)
-		{
-			continue;
-		}
-#endif
 		
 		CopyBoneDataContainer.Add(FCopyBoneData(Pair.SourceBone.BoneName, Pair.TargetBone.BoneName, SourceBoneIdx, TargetBoneIdx));
 	}
