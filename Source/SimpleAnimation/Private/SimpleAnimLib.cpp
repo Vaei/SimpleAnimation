@@ -3,6 +3,11 @@
 
 #include "SimpleAnimLib.h"
 
+#include "EngineDefines.h"  // For UE_ENABLE_DEBUG_DRAWING
+#include "DrawDebugHelpers.h"
+#include "GameFramework/Pawn.h"
+#include "Components/SkeletalMeshComponent.h"
+
 #if UE_ENABLE_DEBUG_DRAWING
 #include "PhysicsEngine/BodySetup.h"
 #include "Components/CapsuleComponent.h"
