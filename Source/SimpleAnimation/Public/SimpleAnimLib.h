@@ -61,7 +61,7 @@ public:
 	/**
 	 * Draw debug shapes for the physics bodies of a pawn's skeletal mesh component
 	 * @param Pawn The pawn to draw physics bodies for
-	 * @param Mesh The skeletal mesh component to draw physics bodies for
+	 * @param Capsule The capsule component to draw
 	 * @param bDrawAuthority Whether to draw physics bodies for the authority role
 	 * @param bDrawLocal Whether to draw physics bodies for the local role
 	 * @param bDrawSimulated Whether to draw physics bodies for the simulated role
@@ -76,7 +76,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category=SimpleAnimation, meta=(DefaultToSelf="Pawn", DevelopmentOnly))
 	static void DrawPawnDebugPhysicsCapsule(
-		APawn* Pawn, const UCapsuleComponent* Mesh,
+		APawn* Pawn, const UCapsuleComponent* Capsule,
 		const bool bDrawAuthority = false, const bool bDrawLocal = true, const bool bDrawSimulated = false, 
 		bool bStandaloneDrawAuthAsLocal = true,
 		FLinearColor AuthColor = FLinearColor(1.f, 0.5f, 0.f),		// Orange

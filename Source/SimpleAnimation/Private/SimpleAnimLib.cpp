@@ -126,7 +126,7 @@ void USimpleAnimLib::DrawDebugPhysicsBodies(USkeletalMeshComponent* Mesh, FLinea
 #endif
 }
 
-void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComponent* Mesh, const bool bDrawAuthority, 
+void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComponent* Capsule, const bool bDrawAuthority, 
 	const bool bDrawLocal, const bool bDrawSimulated, bool bStandaloneDrawAuthAsLocal, FLinearColor AuthColor, 
 	FLinearColor LocalColor, FLinearColor SimulatedColor, const bool bPersistentLines, const float Duration, const float Thickness)
 {
@@ -166,7 +166,7 @@ void USimpleAnimLib::DrawPawnDebugPhysicsCapsule(APawn* Pawn, const UCapsuleComp
 	}
 
 	// Draw the capsule
-	DrawDebugPhysicsCapsule(Mesh, Color, bPersistentLines, Duration, Thickness);
+	DrawDebugPhysicsCapsule(Capsule, Color, bPersistentLines, Duration, Thickness);
 #endif
 }
 
