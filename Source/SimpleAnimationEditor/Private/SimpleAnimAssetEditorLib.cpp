@@ -39,10 +39,11 @@ void USimpleAnimAssetEditorLib::EditorCastArrayChecked(TArray<UObject*> ArrayToC
 	}
 }
 
-void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations)
+void USimpleAnimAssetEditorLib::ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations, int32 PreviewMeshIndex)
 {
 	const USimpleAnimationDeveloperSettings* Settings = USimpleAnimationDeveloperSettings::Get();
-	USkeletalMesh* PreviewMesh = Settings->DefaultSkeletalMesh.LoadSynchronous();
+	const TSoftObjectPtr<USkeletalMesh>& MeshFromIndex = PreviewMeshIndex == 0 ? Settings->DefaultSkeletalMesh : (PreviewMeshIndex == 1 ? Settings->DefaultSkeletalMesh1 : Settings->DefaultSkeletalMesh2);
+	USkeletalMesh* PreviewMesh = MeshFromIndex.LoadSynchronous();
 	if (!IsValid(PreviewMesh))
 	{
 		FMessageLog("AssetCheck")

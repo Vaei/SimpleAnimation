@@ -22,4 +22,12 @@ public:
 	/** Skeletal mesh to assign when assigning the preview mesh in the editor */
 	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category=Animation)
 	TSoftObjectPtr<USkeletalMesh> DefaultSkeletalMesh;
+	
+	/** Skeletal mesh to assign when assigning the preview mesh in the editor */
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category=Animation)
+	TSoftObjectPtr<USkeletalMesh> DefaultSkeletalMesh1;
+	
+	/** Skeletal mesh to assign when assigning the preview mesh in the editor */
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category=Animation)
+	TSoftObjectPtr<USkeletalMesh> DefaultSkeletalMesh2;
 };

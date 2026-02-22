@@ -23,7 +23,7 @@ public:
 
 	/** Apply default mesh set in USimpleAnimationDeveloperSettings as the preview mesh */
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
-	static void ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations);
+	static void ApplyPreviewMesh(const TArray<UAnimSequenceBase*>& Animations, int32 PreviewMeshIndex=0);
 	
 	UFUNCTION(BlueprintCallable, CallInEditor, Category="Editor|Animation")
 	static void SetAnimRootLock(bool bLock, const TArray<UAnimSequence*>& Animations);
