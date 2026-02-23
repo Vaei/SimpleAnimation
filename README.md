@@ -21,7 +21,15 @@ An Unreal Engine plugin providing animation utilities.
 
 ## Modifier Preview Videos
 
+### Adjust Sprint Animations for Ninja Movement
+
+https://github.com/user-attachments/assets/4fa3b642-3e07-4f17-90f5-cdd01545d403
+
+### Adjust Animations to Hold Weapon
+
 https://github.com/user-attachments/assets/31d3b97c-f24f-4ecb-9ef4-db67134d079a
+
+### Adjust Cycle Animations to Push into Wall
 
 https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
 
