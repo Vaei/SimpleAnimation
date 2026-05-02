@@ -40,7 +40,9 @@ void UCopyIKBonesModifier::OnApply_Implementation(UAnimSequence* Animation)
 	const USkeleton* Skeleton = Animation->GetSkeleton();
 	const FReferenceSkeleton& RefSkeleton = Skeleton->GetReferenceSkeleton();
 
-	// Validate input
+	// Validate input against the skeleton (not the animation tracks), so we still
+	// process pairs whose target bone has no track in this animation - we add the
+	// track below before writing keys.
 	TArray<FCopyBoneData> CopyBoneDataContainer;
 	CopyBoneDataContainer.Reserve(BonesToCopy.Num());
 	for (const FCopyBonePairs& Pair : BonesToCopy)
@@ -81,6 +83,18 @@ void UCopyIKBonesModifier::OnApply_Implementation(UAnimSequence* Animation)
 	// Start editing animation data
 	constexpr bool bShouldTransact = false;
 	Controller.OpenBracket(LOCTEXT("CopyBonesModifierLib_Bracket", "Updating bones"), bShouldTransact);
+
+	// Add tracks for any target bones that don't already have one in this animation
+	for (const FCopyBoneData& Data : CopyBoneDataContainer)
+	{
+		const bool bHasTrack = Model->IsValidBoneTrackName(Data.TargetBoneName);
+		if (!bHasTrack)
+		{
+			Controller.AddBoneCurve(Data.TargetBoneName, bShouldTransact);
+			UE_LOG(LogAnimation, Display, TEXT("CopyIKBonesModifier: added missing bone track '%s' to '%s'"),
+				*Data.TargetBoneName.ToString(), *GetNameSafe(Animation));
+		}
+	}
 
 	// Get the transform of all the source bones in the desired space
 	const int32 NumKeys = Model->GetNumberOfKeys();

@@ -35,6 +35,9 @@ https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
 
 ## Changelog
 
+### 1.4.3
+* Copy IK Bones Modifier now adds missing bone tracks
+
 ### 1.4.2
 * Allow up to 3 preview mesh assets to be assigned via Scripted Asset Actions
 
