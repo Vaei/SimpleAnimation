@@ -4,6 +4,7 @@
 #include "SimpleAnimEditorLib.h"
 
 #include "AnimPose.h"
+#include "Animation/AnimSequence.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimEditorLib)
 
@@ -242,7 +243,7 @@ void USimpleAnimEditorLib::GetBonePosesForTimeInternal(const UAnimSequenceBase* 
 				const FName& BoneName = BoneNames[BoneNameIndex];
 				if (TrackNames.Contains(BoneName))
 				{
-					const FAnimPoseEvaluationOptions EvaluationOptions = FAnimPoseEvaluationOptions();
+					constexpr FAnimPoseEvaluationOptions EvaluationOptions = FAnimPoseEvaluationOptions();
 					FAnimPose AnimPose;
     
 					UAnimPoseExtensions::GetAnimPoseAtTime(Animation, Time, EvaluationOptions, AnimPose);

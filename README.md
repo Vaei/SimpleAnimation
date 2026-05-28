@@ -35,6 +35,9 @@ https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
 
 ## Changelog
 
+### 1.4.4
+* Add missing includes
+
 ### 1.4.3
 * Copy IK Bones Modifier now adds missing bone tracks
 

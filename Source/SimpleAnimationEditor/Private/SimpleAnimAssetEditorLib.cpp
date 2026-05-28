@@ -9,12 +9,17 @@
 #include "EditorReimportHandler.h"
 #include "PackageTools.h"
 #include "SimpleAnimationDeveloperSettings.h"
+#include "Animation/AnimMontage.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
+#include "Animation/AnimSequence.h"
+#include "Animation/AnimNotifies/AnimNotify.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "EditorFramework/AssetImportData.h"
+#include "Engine/SkeletalMesh.h"
 #include "Factories/FbxAssetImportData.h"
 #include "Misc/UObjectToken.h"
+#include "Subsystems/AssetEditorSubsystem.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(SimpleAnimAssetEditorLib)
 

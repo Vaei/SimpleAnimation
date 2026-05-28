@@ -6,8 +6,16 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SimpleAnimAssetEditorLib.generated.h"
 
-struct FMontageBlendSettings;
+
+class UAnimNotifyState;
+class UAnimNotify;
+class UAnimMontage;
+class UAnimCurveCompressionSettings;
+class UAnimSequence;
+class UAnimSequenceBase;
 class UAnimationModifier;
+struct FMontageBlendSettings;
+enum EAdditiveAnimationType : int;
 /**
  * Functions for editor action utilities for animation assets
  */
