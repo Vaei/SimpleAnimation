@@ -18,6 +18,7 @@ An Unreal Engine plugin providing animation utilities.
 - **Blend Pose**: Bake a sampled pose into an animation using per-bone weights and blend masks, as override or additive
 - **Blend Transform**: Apply a transform delta across all frames with per-bone masking
 - **Copy IK Bones**: Copy source bone transforms to IK targets at edit time
+- **Root Motion Axis**: Remove or straighten root motion per axis, optionally folding the removed motion back into the pelvis so the pose is unchanged
 
 ## Modifier Preview Videos
 
@@ -34,6 +35,12 @@ https://github.com/user-attachments/assets/31d3b97c-f24f-4ecb-9ef4-db67134d079a
 https://github.com/user-attachments/assets/1a55f1ec-7596-43a1-9ec2-6ffdd3101bfb
 
 ## Changelog
+
+### 1.5.0
+* Added `URootMotionAxisModifier`
+	* Removes or straightens root motion on individual translation and rotation axes
+	* `bPreservePose` folds the removed motion into a child of the root, so only the root motion changes and the visible animation does not
+	* For animation exported from tools that derive the root from the pelvis, where a straight walk arrives with an arc baked into the root
 
 ### 1.4.4
 * Add missing includes
